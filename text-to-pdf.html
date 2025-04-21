@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to PDF Converter</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        h1 {
+            color: #4a6fa5;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            resize: vertical;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+        
+        button {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3a5a80;
+        }
+        
+        .options {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to PDF Converter</h1>
+        
+        <div class="options">
+            <label for="fontFamily">Font:</label>
+            <select id="fontFamily">
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="'Palatino Linotype', 'Book Antiqua', serif">Palatino</option>
+            </select>
+            
+            <label for="fontSize">Size:</label>
+            <select id="fontSize">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+            </select>
+        </div>
+        
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+        
+        <button onclick="generatePDF()">Convert to PDF</button>
+    </div>
+
+    <script>
+        function generatePDF() {
+            const text = document.getElementById('textInput').value;
+            const fontFamily = document.getElementById('fontFamily').value;
+            const fontSize = document.getElementById('fontSize').value;
+            
+            if (!text) {
+                alert('Please enter some text first!');
+                return;
+            }
+            
+            // Create a new window with the content
+            const win = window.open('', '_blank');
+            
+            // Style the content for PDF
+            win.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Converted PDF</title>
+                    <style>
+                        body {
+                            font-family: ${fontFamily};
+                            font-size: ${fontSize};
+                            line-height: 1.6;
+                            padding: 50px;
+                            white-space: pre-wrap;
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${text.replace(/\n/g, '<br>')}
+                </body>
+                </html>
+            `);
+            
+            win.document.close();
+            
+            // Wait for content to load then print to PDF
+            setTimeout(() => {
+                win.print();
+            }, 200);
+        }
+    </script>
+</body>
+</html>
